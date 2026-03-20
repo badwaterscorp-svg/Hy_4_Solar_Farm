@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 public class PlayerHandler : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class PlayerHandler : MonoBehaviour
     private IInputService _inputService;
     private PlayerMovement _movement;
 
+
+    [Inject]
     public void Initialize(IInputService inputService)
     {
         _inputService = inputService;

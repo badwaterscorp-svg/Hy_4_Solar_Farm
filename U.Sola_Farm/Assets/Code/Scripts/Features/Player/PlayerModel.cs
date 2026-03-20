@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class PlayerModel : Extensions.ICopy<PlayerModel>
+public class PlayerModel : ICopy<PlayerModel>
 {
     public float MoveSpeed = 5f;
 
