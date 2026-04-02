@@ -11,9 +11,14 @@ public class PlayerMovement
         _transform = transform;
     }
 
-    public void Move(Vector2 input)
+    public void Move(Vector2 direction, float strength)
     {
-        Vector3 direction = new Vector3(input.x, 0, input.y);
-        _transform.position += direction * _model.MoveSpeed * Time.deltaTime;
+        if (direction.sqrMagnitude > 0.01f)
+        {
+            Vector3 moveDir = new Vector3(direction.x, 0, direction.y);
+            moveDir.Normalize();
+            float speed = _model.MoveSpeed * Mathf.Clamp01(strength);
+            _transform.position += moveDir * speed * Time.deltaTime;
+        }
     }
 }
