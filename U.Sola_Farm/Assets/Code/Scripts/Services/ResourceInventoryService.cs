@@ -2,16 +2,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using B_Extensions;
 
-public class ResourceInventoryService : Singleton<ResourceInventoryService>, IResourceInventoryService
+public class ResourceInventoryService:IResourceInventoryService
 {
-    private List<ResourceModel> _resources = new List<ResourceModel>();
+    private  List<ResourceModel> _resources = new List<ResourceModel>();
 
-    public void AddResource(ResourceModel resource)
+    public  void AddResource(ResourceModel resource)
     {
         ResourceModel existing = _resources.Find(r => r.Name == resource.Name);
         if (existing != null)
         {
-            existing.SetCantidad(existing.Amount + resource.Amount);
+            existing.AddAmount(existing.Amount++);
+            existing.Amount++;
         }
         else
         {
@@ -21,12 +22,18 @@ public class ResourceInventoryService : Singleton<ResourceInventoryService>, IRe
         SaveInventory();
     }
 
-    public void SaveInventory()
+    public  void SaveInventory()
     {
         ResourceWrapper wrapper = new ResourceWrapper
         {
             resources = _resources
         };
+        
+        foreach (var resource in wrapper.resources)
+        {
+            Debug.Log($"Saving Resource: {resource.Name} with Amount: {resource.Amount}");
+        }
+
         string json = JsonUtility.ToJson(wrapper);
         PlayerPrefs.SetString(KeyStorage.ResourceInventory, json);
         PlayerPrefs.Save();

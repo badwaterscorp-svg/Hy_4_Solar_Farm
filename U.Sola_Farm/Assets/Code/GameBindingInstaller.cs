@@ -7,6 +7,7 @@ public class GameBindingInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.BindInstance<IInputService>(inputService).AsSingle().NonLazy();
-        Container.BindInstance<IResourceInventoryService>(ResourceInventoryService.Instance).AsSingle().NonLazy();
+        Container.BindInstance<IResourceInventoryService>(new ResourceInventoryService()).AsSingle().NonLazy();
+        Container.BindInstance<IResourcePoolService>(ResourcePoolService.Instance).AsSingle().NonLazy();
     }
 }

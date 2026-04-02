@@ -25,7 +25,6 @@ public class PlayerHandler : MonoBehaviour
 
     private void OnDisable()
     {
-        Debug.LogError("Error al guardar los recursos revise ResourceInventoryService");
         _inputService.OnDragStarted -= OnDragStarted;
         _inputService.OnDragStoped -= OnDragStoped;
         if (_collisionDetector != null)
