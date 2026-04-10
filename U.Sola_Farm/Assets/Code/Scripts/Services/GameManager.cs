@@ -6,8 +6,8 @@ using Zenject;
 public class GameManager : Singleton<GameManager>
 {
 
-    IResourceInventoryService _rService;
-    [Inject] private void Factory(IResourceInventoryService rService) 
+    IInventoryService _rService;
+    [Inject] private void Factory(IInventoryService rService) 
     {
         _rService = rService;
     }

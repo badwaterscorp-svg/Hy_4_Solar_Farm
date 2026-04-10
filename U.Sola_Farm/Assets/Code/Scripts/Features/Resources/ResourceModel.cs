@@ -12,7 +12,15 @@ public class ResourceModel : ICopy<ResourceModel>
     {
         int previous = Amount;
         Amount += newAmount;
-        Debug.Log($"Resource {Name} amount changed from {previous} to {Amount}");
+        //Debug.Log($"Resource {Name} amount changed from {previous} to {Amount}");
+        OnAmountChanged?.Invoke(Amount, previous);
+    }
+
+    public void RemoveAmount(int removeAmount)
+    {
+        int previous = Amount;
+        Amount -= removeAmount;
+        //Debug.Log($"Resource {Name} amount changed from {previous} to {Amount}");
         OnAmountChanged?.Invoke(Amount, previous);
     }
 

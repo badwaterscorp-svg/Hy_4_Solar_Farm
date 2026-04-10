@@ -33,28 +33,13 @@ public class ResourcePoolService : Singleton<ResourcePoolService>, IResourcePool
         return handler;
     }
 
-    private void OnGet(ResourceHandler handler)
-    {
-        handler.gameObject.SetActive(true);
-    }
+    private void OnGet(ResourceHandler handler) => handler.gameObject.SetActive(true);
 
-    private void OnRelease(ResourceHandler handler)
-    {
-        handler.gameObject.SetActive(false);
-    }
+    private void OnRelease(ResourceHandler handler) => handler.gameObject.SetActive(false);
 
-    private void OnDestroyItem(ResourceHandler handler)
-    {
-        UnityEngine.Object.Destroy(handler.gameObject);
-    }
+    private void OnDestroyItem(ResourceHandler handler) => Destroy(handler.gameObject);
 
-    public ResourceHandler Get()
-    {
-        return _pool.Get();
-    }
+    public ResourceHandler Get() => _pool.Get();
 
-    public void Release(ResourceHandler handler)
-    {
-        _pool.Release(handler);
-    }
+    public void Release(ResourceHandler handler) => _pool.Release(handler);
 }

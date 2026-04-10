@@ -1,18 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using B_Extensions;
+using System;
 
-public class ResourceInventoryService:IResourceInventoryService
+public class ResourceInventoryService:IInventoryService
 {
     private  List<ResourceModel> _resources = new List<ResourceModel>();
 
-    public  void AddResource(ResourceModel resource)
+    public event Action<ResourceModel> OnModelChanged;
+
+    public bool AddResource(ResourceModel resource)
     {
         ResourceModel existing = _resources.Find(r => r.Name == resource.Name);
         if (existing != null)
         {
-            existing.AddAmount(existing.Amount++);
-            existing.Amount++;
+            existing.AddAmount(1);
         }
         else
         {
@@ -20,6 +22,8 @@ public class ResourceInventoryService:IResourceInventoryService
             _resources.Add(copy);
         }
         SaveInventory();
+        OnModelChanged.Invoke(resource);
+        return true;
     }
 
     public  void SaveInventory()
@@ -28,11 +32,6 @@ public class ResourceInventoryService:IResourceInventoryService
         {
             resources = _resources
         };
-        
-        foreach (var resource in wrapper.resources)
-        {
-            Debug.Log($"Saving Resource: {resource.Name} with Amount: {resource.Amount}");
-        }
 
         string json = JsonUtility.ToJson(wrapper);
         PlayerPrefs.SetString(KeyStorage.ResourceInventory, json);
@@ -47,5 +46,15 @@ public class ResourceInventoryService:IResourceInventoryService
             ResourceWrapper wrapper = JsonUtility.FromJson<ResourceWrapper>(json);
             _resources = wrapper.resources ?? new List<ResourceModel>();
         }
+    }
+
+    public void RemoveResource(ResourceModel resource)
+    {
+        OnModelChanged.Invoke(resource);
+    }
+
+    public int GetResourceCount(string resourceName)
+    {
+        throw new NotImplementedException();
     }
 }

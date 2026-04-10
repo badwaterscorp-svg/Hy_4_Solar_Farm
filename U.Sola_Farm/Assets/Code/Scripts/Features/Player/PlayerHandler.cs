@@ -1,53 +1,68 @@
+using B_Extensions;
+using DG.Tweening;
 using System;
 using UnityEngine;
 using Zenject;
 
-public class PlayerHandler : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+public class PlayerHandler : Singleton<PlayerHandler>
 {
     [SerializeField] private PlayerModel _model;
-    [SerializeField] private CollisionDetector _collisionDetector;
-    
+    [SerializeField] private BackPackHandler _backPackHandler;
+    [SerializeField] private TriggerDetector _triggerDetector;
+
+    private IResourcePoolService _resourcePool;
     private IInputService _inputService;
-    private IResourceInventoryService _inventoryService;
     private PlayerMovement _movement;
     private bool _isDragging;
+    private Rigidbody _rb;
 
     [Inject]
-    public void Initialize(IInputService inputService, IResourceInventoryService inventoryService)
+    public void Initialize(IInputService inputService, IResourcePoolService resourcePool)
     {
         _inputService = inputService;
-        _inventoryService = inventoryService;
-        _movement = new PlayerMovement(_model, transform);
+        _rb = GetComponent<Rigidbody>();
+        _movement = new PlayerMovement(_model, transform, _rb);
+        _resourcePool = resourcePool;
         _inputService.OnDragStarted += OnDragStarted;
         _inputService.OnDragStoped += OnDragStoped;
-        _collisionDetector.OnCollisionEntered += OnResourceCollision;
+    }
+
+    private void OnEnable() => _triggerDetector.OnTriggerEntered += OnTriggerEntered;
+
+    private void OnTriggerEntered(Transform other)
+    {
+        if (_backPackHandler.IsBackPackFull())
+            return;
+
+        if (other.TryGetComponent<ResourceHandler>(out var ss))
+            other.DOMove(transform.position, 0.3f).OnComplete(() => AddResource(ss));
     }
 
     private void OnDisable()
     {
         _inputService.OnDragStarted -= OnDragStarted;
         _inputService.OnDragStoped -= OnDragStoped;
-        if (_collisionDetector != null)
-            _collisionDetector.OnCollisionEntered -= OnResourceCollision;
+        _triggerDetector.OnTriggerEntered -= OnTriggerEntered;
     }
 
-    private void OnResourceCollision(Collision other)
+    public BackPackHandler AccessBackPackHandler() => _backPackHandler;
+
+    public bool AddResource(ResourceHandler resource)
     {
-        ResourceHandler resource = other.gameObject.GetComponent<ResourceHandler>();
-        if (resource != null)
-        {
-            _inventoryService.AddResource(resource.Sheet.GetModelCopy());
-        }
+        bool added = _backPackHandler.AddResource(resource.Sheet.Model.Copy());
+        if (added)
+            _resourcePool.Release(resource);
+        else
+            transform.DOKill();
+        return added;
     }
 
-    private void OnDragStoped()
-    {
-        _isDragging = false;
-    }
+    private void OnDragStoped() => _isDragging = false;
 
     private void OnDragStarted() => _isDragging = true;
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (_isDragging)
         {
@@ -59,9 +74,8 @@ public class PlayerHandler : MonoBehaviour
             {
                 Vector3 lookDirection = new Vector3(dragDir.x, 0, dragDir.y);
                 Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-                transform.rotation = targetRotation;
+                _rb.MoveRotation(targetRotation);
             }
-            
             _movement.Move(dragDir, strength);
         }
     }
