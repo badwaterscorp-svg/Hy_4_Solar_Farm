@@ -28,7 +28,6 @@ public class BuildingPlaceHandler : MonoBehaviour
             _triggerDetector.OnTriggerEntered -= OnTriggerEntered;
     }
 
-
     private void OnTriggerEntered(Transform other)
     {
         if (isBuilt)
@@ -82,7 +81,6 @@ public class BuildingPlaceHandler : MonoBehaviour
             var clone = _spawnerFactory.Create();
             clone.transform.position = transform.position + Vector3.up;
             clone.transform.rotation = transform.rotation;
-            //Instantiate(_buildingPrefab, transform.position, transform.rotation);
             Debug.Log("[BuildingPlaceHandler] Building constructed!");
         }
         else
