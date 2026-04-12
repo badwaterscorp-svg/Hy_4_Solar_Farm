@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -33,10 +32,14 @@ public class ResourceSpawner : BaseSpawnerSourceHandler
 
     private Vector3 GetLineSpawnPosition()
     {
-        int column = SpawnedCount % _columnsPerRow;
-        int row = SpawnedCount / _columnsPerRow;
-        return _spawnArea.position +
-            new Vector3(column * _spawnBounds.x, 0, row * _spawnBounds.y);
+        int indexBatery = SpawnedCount;
+        int column = indexBatery % _columnsPerRow;
+        int row = indexBatery / _columnsPerRow;
+
+        return _spawnArea.position + ( 
+            (indexBatery ==0)?
+            new Vector3(_spawnBounds.x*0, 0, _spawnBounds.y*0) :
+            new Vector3(column * _spawnBounds.x, 0, row * _spawnBounds.y));
     }
 
     protected override void Spawn()
@@ -48,6 +51,7 @@ public class ResourceSpawner : BaseSpawnerSourceHandler
 
         Vector3 posSpawn = GetLineSpawnPosition();
         ResourceHandler handler = _poolService.Get();
+        
         _spawnedResources.Add(handler);
         handler.OnDeactive += ResourceCollected;
         handler.transform.position = posSpawn;
@@ -64,7 +68,5 @@ public class ResourceSpawner : BaseSpawnerSourceHandler
         OnDespawn?.Invoke();
     }
 
-    public class Factory : PlaceholderFactory<ResourceSpawner>
-    {
-    }
+    public class Factory : PlaceholderFactory<ResourceSpawner>{}
 }

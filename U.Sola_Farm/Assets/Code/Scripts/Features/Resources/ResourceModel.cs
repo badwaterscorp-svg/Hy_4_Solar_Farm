@@ -8,6 +8,12 @@ public class ResourceModel : ICopy<ResourceModel>
     public int Amount;
     public event Action<int, int> OnAmountChanged;
 
+    public ResourceModel(string name, int amount)
+    {
+        Name = name;
+        Amount = amount;
+    }
+
     public void AddAmount(int newAmount)
     {
         int previous = Amount;

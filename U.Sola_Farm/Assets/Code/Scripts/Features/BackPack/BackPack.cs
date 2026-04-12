@@ -15,7 +15,7 @@ public class BackPack : IInventoryService
         private set { }
     }
 
-    public int AmountResourcesOnPack {
+    public int AmountResourcesOn {
         get
         {
             int amount = 0;
@@ -25,6 +25,15 @@ public class BackPack : IInventoryService
             }
             return amount;
         }
+    }
+
+    public ResourceWrapper GetResources() 
+    {
+        ResourceWrapper wrapper = new ResourceWrapper
+        {
+            resources = _resources
+        };
+        return wrapper;
     }
 
     public void RemoveResource(ResourceModel resource)
@@ -51,11 +60,10 @@ public class BackPack : IInventoryService
     }
 
 
-    public bool IsBackPackFull=> AmountResourcesOnPack >= AmountMax;
+    public bool IsBackPackFull=> AmountResourcesOn >= AmountMax;
 
     public bool AddResource(ResourceModel resource)
     {
-
         if (IsBackPackFull)
         { 
             return false;

@@ -42,8 +42,8 @@ public class BackPackAmountView:MonoBehaviour
 
     private string GetFullAmount()
     {
-        var backBack = _backPackHandler.AccessBackPack();
-        return $"{backBack.AmountResourcesOnPack}/{backBack.AmountMax}";
+        var backBack = _backPackHandler.AccessBackPackAsClass();
+        return $"{backBack.AmountResourcesOn}/{backBack.AmountMax}";
     }
 
     private void Hide() => _animaController.ActiveAnimation(0);

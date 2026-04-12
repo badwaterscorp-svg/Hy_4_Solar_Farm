@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.Pool;
 using B_Extensions;
 
-public class ResourcePoolService : Singleton<ResourcePoolService>, IResourcePoolService
+public class ResourcePoolService : MonoBehaviour, IResourcePoolService
 {
-    [SerializeField] private ResourceHandler _prefab;
+    [SerializeField] private ResourceSheet _prototype;
     [SerializeField] private Transform _parent;
     
     private ObjectPool<ResourceHandler> _pool;
@@ -12,9 +12,8 @@ public class ResourcePoolService : Singleton<ResourcePoolService>, IResourcePool
     public int CountActive => _pool.CountActive;
     public int CountInactive => _pool.CountInactive;
 
-    private new void Awake()
+    private void Awake()
     {
-        base.Awake();
         _pool = new ObjectPool<ResourceHandler>(
             createFunc: CreateItem,
             actionOnGet: OnGet,
@@ -24,12 +23,16 @@ public class ResourcePoolService : Singleton<ResourcePoolService>, IResourcePool
             defaultCapacity: 10,
             maxSize: 100
         );
+        
     }
 
     private ResourceHandler CreateItem()
     {
-        ResourceHandler handler = UnityEngine.Object.Instantiate(_prefab, _parent);
+        var path = System.IO.Path.Combine("Prototypes",_prototype.Path);
+        var res = Resources.Load<ResourceHandler>(path);
+        ResourceHandler handler = Instantiate(res, _parent);
         handler.gameObject.SetActive(false);
+        //Resources.UnloadAsset(res);
         return handler;
     }
 

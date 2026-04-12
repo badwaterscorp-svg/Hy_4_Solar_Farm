@@ -8,6 +8,11 @@ public class ResourcesRepository : Singleton<ResourcesRepository>
 
     public ResourceSheet GetResourcesRandom() => sheets[Random.Range(0, sheets.Length)];
 
+    public ResourceSheet GetSheetByName(string name) 
+    {
+        return System.Array.Find(sheets, s => s.Model.Name.Equals(name));
+    }
+
     public Sprite GetSpriteByNameAndQuality(string nameResource) 
     {
         var _sheet = System.Array.Find(sheets, s => s.Model.Name.Equals(nameResource));

@@ -6,6 +6,7 @@ public interface IInventoryService
     bool AddResource(ResourceModel resource);
     void RemoveResource(ResourceModel resource);
     int GetResourceCount(string resourceName);
+    ResourceWrapper GetResources();
     void SaveInventory();
     void LoadInventory();
 }

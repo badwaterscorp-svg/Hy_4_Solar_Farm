@@ -1,77 +1,95 @@
 using System.Collections.Generic;
+using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
+using System.Linq;
 
 public class BuildingPlaceHandler : MonoBehaviour
 {
     [SerializeField] private TriggerDetector _triggerDetector;
-    [SerializeField] private List<ResourceModel> _buildingRequirements = new List<ResourceModel>();
     [SerializeField] private GameObject _buildingPrefab;
+    [SerializeField] private float _checkInterval = 0.1f;
+    [SerializeField] private List<ResourceModel> _buildingRequirements = new List<ResourceModel>();
+    [Header("--UI--")]
+    [SerializeField] BuildingPlaceUI _ui;
+
+    [HideInInspector] public List<ResourceModel> storageRequirements = new List<ResourceModel>();
 
     //private BackPack _backPack;
     bool isBuilt = false;
+    private float _timer = 0f;
     ResourceSpawner.Factory _spawnerFactory;
+    
     [Inject]
     public void Initialize(ResourceSpawner.Factory spawnerFactory) 
     {
         _spawnerFactory = spawnerFactory;
+        storageRequirements = new List<ResourceModel>();
+        foreach (ResourceModel req in _buildingRequirements)
+        {
+            storageRequirements.Add(new ResourceModel(req.Name, req.Amount));
+        }
     }
 
     private void OnEnable()
     {
-        _triggerDetector.OnTriggerEntered += OnTriggerEntered;
+        _ui.Configure(this);
+        _triggerDetector.OnTriggerStayed += OnTriggerStayed;
     }
 
     private void OnDisable()
     {
         if (_triggerDetector != null)
-            _triggerDetector.OnTriggerEntered -= OnTriggerEntered;
+            _triggerDetector.OnTriggerStayed -= OnTriggerStayed;
     }
 
-    private void OnTriggerEntered(Transform other)
+    private void OnTriggerStayed(Transform other)
     {
         if (isBuilt)
             return;
 
-        print($"[BuildingPlaceHandler] Trigger entered by {other.name}");
-        if (HasEnoughResources())
+        _timer += Time.deltaTime;
+        
+        if (_timer >= _checkInterval)
         {
-            ConsumeResources();
-            Build();
+            _timer = 0f;
+            
+            ConsumeResource();
+
+            var pass = storageRequirements.All(r => r.Amount == 0);
+
+            if (pass)
+            {
+                Build();
+            }
+        }
+    }
+    
+    private void ConsumeResource()
+    {
+        var storageReq = storageRequirements.FirstOrDefault(r => r.Amount >0);
+        BackPackHandler backPack = PlayerHandler.Instance.AccessBackPackHandler();
+        if (storageReq != null)
+        {
+            if (backPack.GetCountResource(storageReq.Name) > 0)
+            {
+                backPack.RemoveResource(storageReq);
+                storageReq.RemoveAmount(1);
+                _ui.UpdateUI();
+            }
+            else
+            {
+                print($"[BuildingPlaceHandler] Player does not have required resource: {storageReq.Name}");
+            }
         }
         else
         {
-            Debug.Log($"[BuildingPlaceHandler] Not enough resources to build.");
-            LogRequirements();
+            print($"[BuildingPlaceHandler] Player does not have required resource: {storageReq.Name}");
         }
     }
 
-    public bool HasEnoughResources()
-    {
-        foreach (ResourceModel requirement in _buildingRequirements)
-        {
-            int available = PlayerHandler.Instance.AccessBackPackHandler().GetCountResource(requirement.Name);
-            if (available < requirement.Amount)
-            {
-                Debug.Log($"[BuildingPlaceHandler] Missing {requirement.Name}: need {requirement.Amount}, have {available}");
-                return false;
-            }
-        }
-        Debug.Log("[BuildingPlaceHandler] Enough resources to build!");
-        return true;
-    }
-
-    private void ConsumeResources()
-    {
-        foreach (ResourceModel requirement in _buildingRequirements)
-        {
-            for (int i = 0; i < requirement.Amount; i++)
-            {
-                PlayerHandler.Instance.AccessBackPackHandler().RemoveResource(requirement);
-                Debug.Log($"[BuildingPlaceHandler] Consumed 1 {requirement.Name}");
-            }
-        }
-    }
 
     private void Build()
     {
@@ -81,6 +99,7 @@ public class BuildingPlaceHandler : MonoBehaviour
             var clone = _spawnerFactory.Create();
             clone.transform.position = transform.position + Vector3.up;
             clone.transform.rotation = transform.rotation;
+            gameObject.SetActive(false);
             Debug.Log("[BuildingPlaceHandler] Building constructed!");
         }
         else
@@ -90,14 +109,33 @@ public class BuildingPlaceHandler : MonoBehaviour
     }
 
     public List<ResourceModel> GetRequirements() => _buildingRequirements;
+}
 
-    private void LogRequirements()
+[System.Serializable]
+public class  BuildingPlaceUI
+{
+    [SerializeField] private ResourceCollectionCard[] cards;
+    BuildingPlaceHandler placeHandler;
+
+    public void Configure(BuildingPlaceHandler placeHandler) 
     {
-        Debug.Log("[BuildingPlaceHandler] Requirements:");
-        foreach (ResourceModel req in _buildingRequirements)
+        this.placeHandler = placeHandler;
+        for (int i = 0; i < placeHandler.storageRequirements.Count; i++)
         {
-            int available = PlayerHandler.Instance.AccessBackPackHandler().GetCountResource(req.Name);
-            Debug.Log($"  - {req.Name}: {available}/{req.Amount}");
+            var req = placeHandler.storageRequirements[i];
+            var sheet = ResourcesRepository.Instance.GetSheetByName(req.Name);
+            cards[i].Configure(sheet, req.Amount);
+        }
+    }
+
+    public void UpdateUI()
+    {
+        foreach (var item in placeHandler.storageRequirements)
+        {
+            foreach (var card in cards)
+            {
+                card.Draw(item);
+            }
         }
     }
 }
