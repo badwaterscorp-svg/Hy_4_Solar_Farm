@@ -4,7 +4,7 @@ using UnityEngine;
 public class ResourceSpawnerCountView : MonoBehaviour
 {
     [SerializeField] TMP_Text _countText;
-    [SerializeField] private ResourceSpawner _spawner;
+    [SerializeField] private BaseSpawnerResource _spawner;
 
     private void OnEnable()
     {

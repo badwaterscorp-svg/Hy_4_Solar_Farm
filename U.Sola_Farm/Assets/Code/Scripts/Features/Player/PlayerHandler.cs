@@ -11,24 +11,26 @@ public class PlayerHandler : Singleton<PlayerHandler>
     [SerializeField] private BackPackHandler _backPackHandler;
     [SerializeField] private TriggerDetector _triggerDetector;
 
-    private IResourcePoolService _resourcePool;
-    private IInputService _inputService;
     private PlayerMovement _movement;
     private bool _isDragging;
     private Rigidbody _rb;
 
-    [Inject]
-    public void Initialize(IInputService inputService, IResourcePoolService resourcePool)
+    [Inject] private IInputService _inputService;
+    [Inject(Id = "Water")] IResourcePoolService _poolWater;
+    [Inject(Id = "SolarEnergy")] IResourcePoolService _poolEnergy;
+
+    private new void Awake()
     {
-        _inputService = inputService;
         _rb = GetComponent<Rigidbody>();
         _movement = new PlayerMovement(_model, transform, _rb);
-        _resourcePool = resourcePool;
-        _inputService.OnDragStarted += OnDragStarted;
-        _inputService.OnDragStoped += OnDragStoped;
     }
 
-    private void OnEnable() => _triggerDetector.OnTriggerEntered += OnTriggerEntered;
+    private void OnEnable()
+    {
+        _inputService.OnDragStarted += OnDragStarted;
+        _inputService.OnDragStoped += OnDragStoped;
+        _triggerDetector.OnTriggerEntered += OnTriggerEntered;
+    }
 
     private void OnTriggerEntered(Transform other)
     {
@@ -51,10 +53,15 @@ public class PlayerHandler : Singleton<PlayerHandler>
     public bool AddResource(ResourceHandler resource)
     {
         bool added = _backPackHandler.AddResource(resource.Sheet.Model.Copy());
-        if (added)
-            _resourcePool.Release(resource);
-        else
+        if (!added)
             transform.DOKill();
+        else
+        {
+            if(resource.Sheet.Model.Name.Equals("Water"))
+                _poolWater.Release(resource);
+            else if(resource.Sheet.Model.Name.Equals("Solar Energy"))
+                _poolEnergy.Release(resource);
+        }
         return added;
     }
 

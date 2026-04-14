@@ -6,7 +6,7 @@ public class ResourcePoolService : MonoBehaviour, IResourcePoolService
 {
     [SerializeField] private ResourceSheet _prototype;
     [SerializeField] private Transform _parent;
-    
+
     private ObjectPool<ResourceHandler> _pool;
 
     public int CountActive => _pool.CountActive;

@@ -7,8 +7,10 @@ public class GameManager : Singleton<GameManager>
 {
 
     IInventoryService _rService;
-    [Inject] private void Factory(IInventoryService rService) 
+    [Inject] 
+    private void Factory(IInventoryService rService) 
     {
+        print("[GameManager] Factory called");
         _rService = rService;
     }
 

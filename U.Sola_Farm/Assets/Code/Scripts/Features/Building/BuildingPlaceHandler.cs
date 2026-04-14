@@ -8,6 +8,7 @@ using System.Linq;
 
 public class BuildingPlaceHandler : MonoBehaviour
 {
+    [SerializeField] private string typeBuilding = "Solar Energy";
     [SerializeField] private TriggerDetector _triggerDetector;
     [SerializeField] private GameObject _buildingPrefab;
     [SerializeField] private float _checkInterval = 0.1f;
@@ -20,12 +21,13 @@ public class BuildingPlaceHandler : MonoBehaviour
     //private BackPack _backPack;
     bool isBuilt = false;
     private float _timer = 0f;
-    ResourceSpawner.Factory _spawnerFactory;
-    
-    [Inject]
-    public void Initialize(ResourceSpawner.Factory spawnerFactory) 
+    // factories
+
+    [Inject(Id = "SolarEnergy")] SolarEnergySpawnerHandler.Factory _spawnerFactorySolar;
+    [Inject(Id = "Water")] WaterSpawnerHandler.Factory _spawnerFactoryWater;
+
+    private void Awake()
     {
-        _spawnerFactory = spawnerFactory;
         storageRequirements = new List<ResourceModel>();
         foreach (ResourceModel req in _buildingRequirements)
         {
@@ -96,7 +98,14 @@ public class BuildingPlaceHandler : MonoBehaviour
         if (_buildingPrefab != null)
         {
             isBuilt = true;
-            var clone = _spawnerFactory.Create();
+
+            BaseSpawnerResource clone = null;
+
+            if (typeBuilding.Equals("Solar Energy"))
+                clone = _spawnerFactorySolar.Create();
+            else if (typeBuilding.Equals("Water"))
+                clone = _spawnerFactoryWater.Create();
+
             clone.transform.position = transform.position + Vector3.up;
             clone.transform.rotation = transform.rotation;
             gameObject.SetActive(false);

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b33a1957376d54548b6df432da1149d5, type: 3}
   m_Name: Water
   m_EditorClassIdentifier: 
-  path: 
+  path: Water
   spt: {fileID: 21300000, guid: 14d1a3e37ce714ea2ac7d51afce79e85, type: 3}
   model:
-    Name: Food
+    Name: Water
     Amount: 0

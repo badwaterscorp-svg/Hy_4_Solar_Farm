@@ -1,9 +1,16 @@
 using UnityEngine;
+using Zenject;
 
-public abstract class BaseSpawnerSourceHandler : MonoBehaviour
+public abstract class BaseSpawnerResource : MonoBehaviour
 {
     [SerializeField] protected float timeBetweenSpawns = 1f;
-    
+    [field: SerializeField] public int MaxCollection { get; private set; } = 12;
+    public int SpawnedCount => 0;
+    protected IResourcePoolService _poolService;
+    public System.Action OnSpawn;
+    public System.Action OnDespawn;
+
+
     private float _timer;
     private bool _isSpawning;
 

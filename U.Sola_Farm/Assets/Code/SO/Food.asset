@@ -15,5 +15,5 @@ MonoBehaviour:
   path: 
   spt: {fileID: 21300000, guid: 12295f694bf1f4803b5ac278f1e09a8c, type: 3}
   model:
-    Name: Water
+    Name: Food
     Amount: 0

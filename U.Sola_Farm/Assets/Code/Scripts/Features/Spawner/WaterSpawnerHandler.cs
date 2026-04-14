@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class ResourceSpawner : BaseSpawnerResource
+public class WaterSpawnerHandler : BaseSpawnerResource
 {
+    [Inject(Id = "Water")] protected new IResourcePoolService _poolService;
     [SerializeField] private Transform _spawnArea;
     [Header("---Positions Settings--")]
-    [SerializeField] private Vector2 _spawnBounds = new Vector2(5f, 5f);
-    [SerializeField] private int _columnsPerRow = 3;
-
+    [SerializeField] private Transform[] _spawnPoints;
+    public new int SpawnedCount => _spawnedResources.Count;
     private List<ResourceHandler> _spawnedResources = new List<ResourceHandler>();
 
     protected void OnEnable() => StartSpawning();
@@ -21,32 +21,22 @@ public class ResourceSpawner : BaseSpawnerResource
         });
     }
 
-    protected Vector3 GetLineSpawnPosition()
-    {
-        int indexBatery = SpawnedCount;
-        int column = indexBatery % _columnsPerRow;
-        int row = indexBatery / _columnsPerRow;
-
-        return _spawnArea.position + ( 
-            (indexBatery ==0)?
-            new Vector3(_spawnBounds.x*0, 0, _spawnBounds.y*0) :
-            new Vector3(column * _spawnBounds.x, 0, row * _spawnBounds.y));
-    }
+    protected Vector3 GetLineSpawnPosition() => _spawnPoints[SpawnedCount].position;
 
     protected override void Spawn()
     {
-        if (_spawnedResources.Count>=MaxCollection) 
+        if (_spawnedResources.Count >= MaxCollection)
         {
             return;
         }
 
         Vector3 posSpawn = GetLineSpawnPosition();
         ResourceHandler handler = _poolService.Get();
-        
+
         _spawnedResources.Add(handler);
         handler.OnDeactive += ResourceCollected;
         handler.transform.position = posSpawn;
-        handler.transform.rotation = Quaternion.identity;        
+        handler.transform.rotation = Quaternion.identity;
         handler.gameObject.SetActive(true);
         handler.AnimateInstanciate();
         OnSpawn?.Invoke();
@@ -58,4 +48,5 @@ public class ResourceSpawner : BaseSpawnerResource
         _spawnedResources.Remove(handler);
         OnDespawn?.Invoke();
     }
+    public class Factory : PlaceholderFactory<WaterSpawnerHandler> { }
 }
