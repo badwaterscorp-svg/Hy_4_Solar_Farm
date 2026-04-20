@@ -17,5 +17,6 @@ public class GameBindingInstaller : MonoInstaller
         Container.BindInstance<IResourcePoolService>(poolWater).WithId("Water").AsTransient().NonLazy();
         Container.BindFactory<SolarPanelSpawnerHandler, SolarPanelSpawnerHandler.Factory>().WithId("SolarEnergy").FromComponentInNewPrefab(solarSpawner);
         Container.BindFactory<WaterSpawnerHandler, WaterSpawnerHandler.Factory>().WithId("Water").FromComponentInNewPrefab(waterSpawner);
+        Container.BindInstance<IBuildingSiteDataService>(new BuildingSiteDataService()).AsSingle().NonLazy();
     }
 }

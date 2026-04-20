@@ -15,7 +15,8 @@ public class BuildingPlaceHandler : MonoBehaviour
     [SerializeField] private List<ResourceModel> _buildingRequirements = new List<ResourceModel>();
     [Header("--UI--")]
     [SerializeField] BuildingPlaceUI _ui;
-
+    [Header("--Data--")]
+    [SerializeField] string IDSite = "Here is a ID ToSave";
     [HideInInspector] public List<ResourceModel> storageRequirements = new List<ResourceModel>();
 
     //private BackPack _backPack;
@@ -25,6 +26,7 @@ public class BuildingPlaceHandler : MonoBehaviour
 
     [Inject(Id = "SolarEnergy")] SolarPanelSpawnerHandler.Factory _spawnerFactorySolar;
     [Inject(Id = "Water")] WaterSpawnerHandler.Factory _spawnerFactoryWater;
+    [Inject] private IBuildingSiteDataService _dataService;
 
     private void Awake()
     {
@@ -33,6 +35,9 @@ public class BuildingPlaceHandler : MonoBehaviour
         {
             storageRequirements.Add(new ResourceModel(req.Name, req.Amount));
         }
+
+        if (_dataService.TryLoad(IDSite, out ResourceWrapper wrapper))
+            storageRequirements = wrapper.resources;
     }
 
     private void OnEnable()
@@ -72,18 +77,28 @@ public class BuildingPlaceHandler : MonoBehaviour
         foreach (var item in storageRequirements)
         {
             BackPackHandler backPack = PlayerHandler.Instance.AccessBackPackHandler();
-            if (backPack.GetCountResource(item.Name) > 0)
+            if (backPack.GetCountResource(item.Name) > 0 && item.Amount>0)
             {
                 PlayerHandler.Instance.ThrowResource(item, transform, _checkInterval);
                 backPack.RemoveResource(item);
                 item.RemoveAmount(1);
                 _ui.UpdateUI();
+                SaveStorageRequirements();
             }
             else
             {
                 print($"[BuildingPlaceHandler] Player does not have required resource: {item.Name}");
             }
         }
+    }
+
+    private void SaveStorageRequirements()
+    {
+        ResourceWrapper wrapper = new ResourceWrapper
+        {
+            resources = storageRequirements
+        };
+        _dataService.Save(IDSite, wrapper);
     }
 
 
@@ -112,33 +127,4 @@ public class BuildingPlaceHandler : MonoBehaviour
     }
 
     public List<ResourceModel> GetRequirements() => _buildingRequirements;
-}
-
-[System.Serializable]
-public class  BuildingPlaceUI
-{
-    [SerializeField] private ResourceCollectionCard[] cards;
-    BuildingPlaceHandler placeHandler;
-
-    public void Configure(BuildingPlaceHandler placeHandler) 
-    {
-        this.placeHandler = placeHandler;
-        for (int i = 0; i < placeHandler.storageRequirements.Count; i++)
-        {
-            var req = placeHandler.storageRequirements[i];
-            var sheet = ResourcesRepository.Instance.GetSheetByName(req.Name);
-            cards[i].Configure(sheet, req.Amount);
-        }
-    }
-
-    public void UpdateUI()
-    {
-        foreach (var item in placeHandler.storageRequirements)
-        {
-            foreach (var card in cards)
-            {
-                card.Draw(item);
-            }
-        }
-    }
 }

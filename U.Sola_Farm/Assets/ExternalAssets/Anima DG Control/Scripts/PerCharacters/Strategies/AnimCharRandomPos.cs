@@ -4,6 +4,8 @@ using UnityEngine;
 #if ANIMA_DOTWEEN_PRO
 public class AnimCharRandomPos : ITypingAnimaStrategy
 {
+    public System.Action OnCompleted { get; set; }
+
     public void Animate(DOTweenTMPAnimator animator, float timePerChar, Ease curve)
     {
         Sequence sequence = DOTween.Sequence();
@@ -15,7 +17,7 @@ public class AnimCharRandomPos : ITypingAnimaStrategy
                 continue;
             sequence.Append(animator.DOScaleChar(i, 1, timePerChar));
             sequence2.Append(animator.DOFadeChar(i, 1, timePerChar));
-            sequence3.Append(animator.DOOffsetChar(i, Vector3.zero, timePerChar));
+            sequence3.Append(animator.DOOffsetChar(i, Vector3.zero, timePerChar)).OnComplete(() => OnCompleted?.Invoke());
         }
     }
 

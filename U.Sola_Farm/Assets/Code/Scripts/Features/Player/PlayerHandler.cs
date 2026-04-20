@@ -34,6 +34,14 @@ public class PlayerHandler : Singleton<PlayerHandler>
         _triggerDetector.OnTriggerEntered += OnTriggerEntered;
     }
 
+
+    private void OnDisable()
+    {
+        _inputService.OnDragStarted -= OnDragStarted;
+        _inputService.OnDragStoped -= OnDragStoped;
+        _triggerDetector.OnTriggerEntered -= OnTriggerEntered;
+    }
+
     private void OnTriggerEntered(Transform other)
     {
         if (_backPackHandler.IsBackPackFull())
@@ -45,14 +53,6 @@ public class PlayerHandler : Singleton<PlayerHandler>
                 other.DOMove(transform.position, 0.3f).OnComplete(() => AddResource(ss));
         }
     }
-
-    private void OnDisable()
-    {
-        _inputService.OnDragStarted -= OnDragStarted;
-        _inputService.OnDragStoped -= OnDragStoped;
-        _triggerDetector.OnTriggerEntered -= OnTriggerEntered;
-    }
-
     public BackPackHandler AccessBackPackHandler() => _backPackHandler;
     public void ThrowResource(ResourceModel _model, Transform otherPos,float time) 
     {
@@ -122,6 +122,6 @@ public class PlayerThrowResources
 {
     public void ThrowResources(ResourceHandler resource, Transform throwPoint, Action onEnd, float time,Transform initPoint)
     {
-        resource.Throw(initPoint.position,throwPoint.position,time, onEnd);
+        resource.AnimateJump(initPoint.position,throwPoint.position,time, onEnd);
     }
 }

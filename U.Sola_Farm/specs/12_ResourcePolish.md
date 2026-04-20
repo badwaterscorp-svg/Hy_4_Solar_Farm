@@ -1,4 +1,4 @@
-## 11 Resource Polish
+## 12 Resource Polish
 
 **Do**
 haz un pulido que te indicare más adelante

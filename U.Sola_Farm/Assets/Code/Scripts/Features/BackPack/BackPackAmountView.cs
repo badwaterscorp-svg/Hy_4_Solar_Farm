@@ -1,4 +1,3 @@
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -6,6 +5,7 @@ public class BackPackAmountView:MonoBehaviour
 {
     [SerializeField] private BackPackHandler _backPackHandler;
     [SerializeField] private TMP_Text _resourceItemPrefab;
+    [SerializeField] private TMP_Text textfullBackPack;
     [SerializeField] private AnimationUIController _animaController;
     private void Start()
     {
@@ -43,6 +43,8 @@ public class BackPackAmountView:MonoBehaviour
     private string GetFullAmount()
     {
         var backBack = _backPackHandler.AccessBackPackAsClass();
+        textfullBackPack.gameObject.SetActive(backBack.IsBackPackFull);
+
         return $"{backBack.AmountResourcesOn}/{backBack.AmountMax}";
     }
 

@@ -1,8 +1,11 @@
 ﻿using DG.Tweening;
+using System;
 using UnityEngine;
 #if ANIMA_DOTWEEN_PRO
 public class AnimCharHorizon : ITypingAnimaStrategy
 {
+    public Action OnCompleted { get; set; }
+
     public void Animate(DOTweenTMPAnimator animator, float timePerChar, Ease curve)
     {
         Sequence sequence = DOTween.Sequence();
@@ -13,7 +16,7 @@ public class AnimCharHorizon : ITypingAnimaStrategy
                 continue;
             Vector3 currCharOffset = animator.GetCharOffset(i);
             sequence.Append(animator.DOOffsetChar(i, currCharOffset - new Vector3(30, 00, 0), timePerChar));
-            sequence2.Append(animator.DOFadeChar(i, 1, timePerChar));
+            sequence2.Append(animator.DOFadeChar(i, 1, timePerChar)).OnComplete(() => OnCompleted?.Invoke());
         }
     }
 

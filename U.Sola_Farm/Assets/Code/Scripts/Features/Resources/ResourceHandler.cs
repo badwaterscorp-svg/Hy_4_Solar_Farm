@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Drawing;
 using UnityEngine;
 
 
@@ -17,23 +18,20 @@ public class ResourceHandler : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         if(Sheet == null)
             Sheet = ResourcesRepository.Instance.GetResourcesRandom();
-        AnimateInstanciate();
     }
     private void OnDisable() => OnDeactive?.Invoke(this);
     private void OnEnable()
     {
-        transform.localScale = Vector3.one;
+        transform.localScale = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
     }
 
-    public void AnimateJump(Transform positionWagon) => rb.DOJump(positionWagon.position, 1, 1, 0.5f);
-    public void AnimateInstanciate() => rb.AddForce((Vector3.up * 3) + (Vector3.right * 2), ForceMode.Impulse);
-
-    public void Throw(Vector3 posInit,Vector3 targetPos, float time, Action actionEnd = null)
+    public void AnimateJump(Vector3 posInit, Vector3 targetPos, float time, Action actionEnd = null)
     {
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOScale(Vector3.zero, 0.1f)).SetEase(Ease.InBack);
+        sequence.Append(transform.DOScale(Vector3.zero, 0)).SetEase(Ease.InBack);
         sequence.Append(transform.DOMove(posInit, 0)).SetEase(Ease.InBack);
-        sequence.Append(rb.DOJump(targetPos, 5, 1, time * 3).OnComplete(() => actionEnd?.Invoke()));
+        sequence.Append(transform.DOScale(Vector3.one, 0.1f)).SetEase(Ease.InBack);
+        sequence.Append(rb.DOJump(targetPos, 4, 1, time * 2.5f).OnComplete(() => actionEnd?.Invoke()));
     }
 }

@@ -4,22 +4,28 @@ using UnityEngine;
 #if ANIMA_DOTWEEN_PRO
 public class AnimCharDisplayByFall : ITypingAnimaStrategy
 {
+    public System.Action OnCompleted { get; set; }
+    Sequence sequence = DOTween.Sequence();
+    Sequence sequence2 = DOTween.Sequence();
+
     public void Animate(DOTweenTMPAnimator animator, float timePerChar, Ease curve)
     {
-        Sequence sequence = DOTween.Sequence();
-        Sequence sequence2 = DOTween.Sequence();
+        sequence = DOTween.Sequence();
+        sequence2 = DOTween.Sequence();
         for (int i = 0; i < animator.textInfo.characterCount; ++i)
         {
             if (!animator.textInfo.characterInfo[i].isVisible)
                 continue;
             Vector3 currCharOffset = animator.GetCharOffset(i);
             sequence.Append(animator.DOOffsetChar(i, currCharOffset - new Vector3(0, 30, 0), timePerChar));
-            sequence2.Append(animator.DOFadeChar(i, 1, timePerChar));
+            sequence2.Append(animator.DOFadeChar(i, 1, timePerChar)).OnComplete(() => OnCompleted?.Invoke());
         }
     }
     public void CleanAnimations(DOTweenTMPAnimator animator)
     {
         animator.textInfo.ClearAllMeshInfo();
+        sequence.Kill();
+        sequence2.Kill();
     }
 
     public void PreAnimate(DOTweenTMPAnimator animator)
@@ -39,6 +45,8 @@ public class AnimCharDisplayByFall : ITypingAnimaStrategy
 #if ANIMA_DOTWEEN_PRO
 public class AnimCharFallInvert : ITypingAnimaStrategy
 {
+    public System.Action OnCompleted { get; set; }
+
     public void Animate(DOTweenTMPAnimator animator, float timePerChar, Ease curve)
     {
         Sequence sequence = DOTween.Sequence();
@@ -52,7 +60,7 @@ public class AnimCharFallInvert : ITypingAnimaStrategy
             Vector3 currCharOffset = animator.GetCharOffset(i);
             sequence.Append(animator.DOOffsetChar(i, currCharOffset - new Vector3(0, 30, 0), timePerChar));
             sequence2.Append(animator.DOFadeChar(i, 0, timePerChar));
-            sequence3.Append(animator.DORotateChar(i, new Vector3(0, 0, Random.Range(-90,90)), timePerChar));
+            sequence3.Append(animator.DORotateChar(i, new Vector3(0, 0, Random.Range(-90,90)), timePerChar)).OnComplete(() => OnCompleted?.Invoke());
         }
     }
 

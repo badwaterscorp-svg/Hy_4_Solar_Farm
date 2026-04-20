@@ -46,10 +46,8 @@ public class SolarPanelSpawnerHandler:BaseSpawnerResource
 
         _spawnedResources.Add(handler);
         handler.OnDeactive += ResourceCollected;
-        handler.transform.position = posSpawn;
-        handler.transform.rotation = Quaternion.identity;
+        handler.AnimateJump(_spawnArea.position+Vector3.up*2,posSpawn,0.6f);
         handler.gameObject.SetActive(true);
-        handler.AnimateInstanciate();
         handler.IsThrown = false;
         OnSpawn?.Invoke();
     }
@@ -82,7 +80,6 @@ public class ShowPanelDirty
         this.handler = _handler;
         bufferModel = sheetResource.Model.Copy();
         bufferModel.Amount = amountToClean;
-        triggerDirty.gameObject.SetActive(true);
         card.Configure(sheetResource, amountToClean);
         triggerDirty.OnTriggerStayed += Clean;
     }
@@ -101,10 +98,11 @@ public class ShowPanelDirty
     Coroutine debtCoroutine;
     private IEnumerator DoDebt() 
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         BackPackHandler backPack = PlayerHandler.Instance.AccessBackPackHandler();
         if (backPack.GetCountResource(bufferModel.Name) > 0)
         {
+            PlayerHandler.Instance.ThrowResource(bufferModel, triggerDirty.transform, 0.1f);
             backPack.RemoveResource(bufferModel);
             bufferModel.RemoveAmount(1);
             card.Draw(bufferModel);

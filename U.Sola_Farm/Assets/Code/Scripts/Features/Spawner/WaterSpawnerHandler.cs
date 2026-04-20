@@ -31,13 +31,11 @@ public class WaterSpawnerHandler : BaseSpawnerResource
 
         Vector3 posSpawn = GetLineSpawnPosition();
         ResourceHandler handler = _poolService.Get();
-
         _spawnedResources.Add(handler);
         handler.OnDeactive += ResourceCollected;
-        handler.transform.position = posSpawn;
-        handler.transform.rotation = Quaternion.identity;
+        handler.AnimateJump(_spawnArea.position + Vector3.up * 2, posSpawn, 0.6f);
         handler.gameObject.SetActive(true);
-        handler.AnimateInstanciate();
+        handler.IsThrown = false;
         OnSpawn?.Invoke();
     }
 

@@ -45,10 +45,9 @@ public class ResourceSpawner : BaseSpawnerResource
         
         _spawnedResources.Add(handler);
         handler.OnDeactive += ResourceCollected;
-        handler.transform.position = posSpawn;
-        handler.transform.rotation = Quaternion.identity;        
+        handler.transform.rotation = Quaternion.identity;
+        handler.AnimateJump(_spawnArea.position+Vector3.up*2,posSpawn,0.3f);
         handler.gameObject.SetActive(true);
-        handler.AnimateInstanciate();
         OnSpawn?.Invoke();
     }
 
