@@ -8,9 +8,8 @@ public class WaterSpawnerHandler : BaseSpawnerResource
     [SerializeField] private Transform _spawnArea;
     [Header("---Positions Settings--")]
     [SerializeField] private Transform[] _spawnPoints;
-    public new int SpawnedCount => _spawnedResources.Count;
     private List<ResourceHandler> _spawnedResources = new List<ResourceHandler>();
-
+    public override int SpawnedCount => _spawnedResources.Count;
     protected void OnEnable() => StartSpawning();
 
     protected void OnDisable()
@@ -25,7 +24,7 @@ public class WaterSpawnerHandler : BaseSpawnerResource
 
     protected override void Spawn()
     {
-        if (_spawnedResources.Count >= MaxCollection)
+        if (_spawnedResources.Count >= GetMaxCollection())
         {
             return;
         }
@@ -48,5 +47,8 @@ public class WaterSpawnerHandler : BaseSpawnerResource
         _spawnedResources.Remove(handler);
         OnDespawn?.Invoke();
     }
+
+    public override int GetMaxCollection() => _spawnPoints.Length;
+
     public class Factory : PlaceholderFactory<WaterSpawnerHandler> { }
 }

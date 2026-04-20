@@ -23,7 +23,7 @@ public class BuildingPlaceHandler : MonoBehaviour
     private float _timer = 0f;
     // factories
 
-    [Inject(Id = "SolarEnergy")] SolarEnergySpawnerHandler.Factory _spawnerFactorySolar;
+    [Inject(Id = "SolarEnergy")] SolarPanelSpawnerHandler.Factory _spawnerFactorySolar;
     [Inject(Id = "Water")] WaterSpawnerHandler.Factory _spawnerFactoryWater;
 
     private void Awake()
@@ -57,9 +57,7 @@ public class BuildingPlaceHandler : MonoBehaviour
         if (_timer >= _checkInterval)
         {
             _timer = 0f;
-            
             ConsumeResource();
-
             var pass = storageRequirements.All(r => r.Amount == 0);
 
             if (pass)
@@ -71,24 +69,20 @@ public class BuildingPlaceHandler : MonoBehaviour
     
     private void ConsumeResource()
     {
-        var storageReq = storageRequirements.FirstOrDefault(r => r.Amount >0);
-        BackPackHandler backPack = PlayerHandler.Instance.AccessBackPackHandler();
-        if (storageReq != null)
+        foreach (var item in storageRequirements)
         {
-            if (backPack.GetCountResource(storageReq.Name) > 0)
+            BackPackHandler backPack = PlayerHandler.Instance.AccessBackPackHandler();
+            if (backPack.GetCountResource(item.Name) > 0)
             {
-                backPack.RemoveResource(storageReq);
-                storageReq.RemoveAmount(1);
+                PlayerHandler.Instance.ThrowResource(item, transform, _checkInterval);
+                backPack.RemoveResource(item);
+                item.RemoveAmount(1);
                 _ui.UpdateUI();
             }
             else
             {
-                print($"[BuildingPlaceHandler] Player does not have required resource: {storageReq.Name}");
+                print($"[BuildingPlaceHandler] Player does not have required resource: {item.Name}");
             }
-        }
-        else
-        {
-            print($"[BuildingPlaceHandler] Player does not have required resource: {storageReq.Name}");
         }
     }
 

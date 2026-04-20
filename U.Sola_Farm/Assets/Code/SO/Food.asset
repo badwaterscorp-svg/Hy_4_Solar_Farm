@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Food
   m_EditorClassIdentifier: 
   path: 
-  spt: {fileID: 21300000, guid: 12295f694bf1f4803b5ac278f1e09a8c, type: 3}
+  spt: {fileID: 21300000, guid: 14d1a3e37ce714ea2ac7d51afce79e85, type: 3}
   model:
     Name: Food
     Amount: 0

@@ -11,6 +11,7 @@ public class PlayerHandler : Singleton<PlayerHandler>
     [SerializeField] private BackPackHandler _backPackHandler;
     [SerializeField] private TriggerDetector _triggerDetector;
 
+    private PlayerThrowResources _playerThrowResources;
     private PlayerMovement _movement;
     private bool _isDragging;
     private Rigidbody _rb;
@@ -23,6 +24,7 @@ public class PlayerHandler : Singleton<PlayerHandler>
     {
         _rb = GetComponent<Rigidbody>();
         _movement = new PlayerMovement(_model, transform, _rb);
+        _playerThrowResources = new PlayerThrowResources();
     }
 
     private void OnEnable()
@@ -38,7 +40,10 @@ public class PlayerHandler : Singleton<PlayerHandler>
             return;
 
         if (other.TryGetComponent<ResourceHandler>(out var ss))
-            other.DOMove(transform.position, 0.3f).OnComplete(() => AddResource(ss));
+        { 
+            if(!ss.IsThrown)
+                other.DOMove(transform.position, 0.3f).OnComplete(() => AddResource(ss));
+        }
     }
 
     private void OnDisable()
@@ -49,6 +54,13 @@ public class PlayerHandler : Singleton<PlayerHandler>
     }
 
     public BackPackHandler AccessBackPackHandler() => _backPackHandler;
+    public void ThrowResource(ResourceModel _model, Transform otherPos,float time) 
+    {
+        var handler = GetResources(_model);
+        handler.IsThrown = true;
+        handler.transform.position = transform.position + (Vector3.up*3);
+        _playerThrowResources.ThrowResources(handler, otherPos, () => ReleaseResource(handler),time,transform);
+    } 
 
     public bool AddResource(ResourceHandler resource)
     {
@@ -56,14 +68,30 @@ public class PlayerHandler : Singleton<PlayerHandler>
         if (!added)
             transform.DOKill();
         else
-        {
-            if(resource.Sheet.Model.Name.Equals("Water"))
-                _poolWater.Release(resource);
-            else if(resource.Sheet.Model.Name.Equals("Solar Energy"))
-                _poolEnergy.Release(resource);
-        }
+            ReleaseResource(resource);
         return added;
     }
+
+    #region TODO
+    // TODO decirle a la IA que lo aisle en un script diferente
+
+    private ResourceHandler GetResources(ResourceModel model) 
+    {
+        if (model.Name.Equals("Water"))
+            return _poolWater.Get();
+        else if (model.Name.Equals("Solar Energy"))
+            return _poolEnergy.Get();
+        return null;
+    }
+
+    private void ReleaseResource(ResourceHandler resource)
+    {
+        if (resource.Sheet.Model.Name.Equals("Water"))
+            _poolWater.Release(resource);
+        else if (resource.Sheet.Model.Name.Equals("Solar Energy"))
+            _poolEnergy.Release(resource);
+    }
+    #endregion
 
     private void OnDragStoped() => _isDragging = false;
 
@@ -85,5 +113,15 @@ public class PlayerHandler : Singleton<PlayerHandler>
             }
             _movement.Move(dragDir, strength);
         }
+    }
+}
+
+
+
+public class PlayerThrowResources
+{
+    public void ThrowResources(ResourceHandler resource, Transform throwPoint, Action onEnd, float time,Transform initPoint)
+    {
+        resource.Throw(initPoint.position,throwPoint.position,time, onEnd);
     }
 }

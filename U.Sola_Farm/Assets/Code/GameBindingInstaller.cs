@@ -4,7 +4,7 @@ using Zenject;
 public class GameBindingInstaller : MonoInstaller
 {
     [SerializeField] DragInputService inputService;
-    [SerializeField] SolarEnergySpawnerHandler solarSpawner;
+    [SerializeField] SolarPanelSpawnerHandler solarSpawner;
     [SerializeField] WaterSpawnerHandler waterSpawner;
     [Header("___Pools___")]
     [SerializeField] ResourcePoolService poolSolarEnergy;
@@ -15,7 +15,7 @@ public class GameBindingInstaller : MonoInstaller
         Container.BindInstance<IInventoryService>(new BackPack()).AsSingle().NonLazy();
         Container.BindInstance<IResourcePoolService>(poolSolarEnergy).WithId("SolarEnergy").AsTransient().NonLazy();
         Container.BindInstance<IResourcePoolService>(poolWater).WithId("Water").AsTransient().NonLazy();
-        Container.BindFactory<SolarEnergySpawnerHandler, SolarEnergySpawnerHandler.Factory>().WithId("SolarEnergy").FromComponentInNewPrefab(solarSpawner);
+        Container.BindFactory<SolarPanelSpawnerHandler, SolarPanelSpawnerHandler.Factory>().WithId("SolarEnergy").FromComponentInNewPrefab(solarSpawner);
         Container.BindFactory<WaterSpawnerHandler, WaterSpawnerHandler.Factory>().WithId("Water").FromComponentInNewPrefab(waterSpawner);
     }
 }

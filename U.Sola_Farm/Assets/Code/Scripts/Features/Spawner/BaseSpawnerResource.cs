@@ -4,8 +4,7 @@ using Zenject;
 public abstract class BaseSpawnerResource : MonoBehaviour
 {
     [SerializeField] protected float timeBetweenSpawns = 1f;
-    [field: SerializeField] public int MaxCollection { get; private set; } = 12;
-    public int SpawnedCount => 0;
+    public virtual int SpawnedCount => 0;
     protected IResourcePoolService _poolService;
     public System.Action OnSpawn;
     public System.Action OnDespawn;
@@ -15,6 +14,7 @@ public abstract class BaseSpawnerResource : MonoBehaviour
     private bool _isSpawning;
 
     protected abstract void Spawn();
+    public abstract int GetMaxCollection();
 
     private void Update()
     {

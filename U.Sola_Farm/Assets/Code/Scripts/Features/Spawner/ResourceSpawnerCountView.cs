@@ -14,7 +14,7 @@ public class ResourceSpawnerCountView : MonoBehaviour
 
     private void UpdateCount()
     {
-        _countText.text = $"{_spawner.SpawnedCount}/{_spawner.MaxCollection}";
+        _countText.text = $"{_spawner.SpawnedCount}/{_spawner.GetMaxCollection()}";
     }
 
     private void OnDisable()

@@ -35,7 +35,7 @@ public class ResourceSpawner : BaseSpawnerResource
 
     protected override void Spawn()
     {
-        if (_spawnedResources.Count>=MaxCollection) 
+        if (_spawnedResources.Count>=GetMaxCollection()) 
         {
             return;
         }
@@ -58,4 +58,6 @@ public class ResourceSpawner : BaseSpawnerResource
         _spawnedResources.Remove(handler);
         OnDespawn?.Invoke();
     }
+
+    public override int GetMaxCollection() => 12;
 }
