@@ -38,5 +38,13 @@ public class AnimCharRandomPos : ITypingAnimaStrategy
             animator.DOOffsetChar(i,new Vector3(Random.Range(-30f,30f), Random.Range(-30f, 30f), 0), 0);
         }
     }
+
+    public void Stop()
+    {
+        //_moveSequence?.Kill();
+        //_fadeSequence?.Kill();
+        //_moveSequence = null;
+        //_fadeSequence = null;
+    }
 }
 #endif

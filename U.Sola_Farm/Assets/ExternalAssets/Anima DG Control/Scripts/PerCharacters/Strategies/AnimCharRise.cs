@@ -24,6 +24,14 @@ public class AnimCharRise : ITypingAnimaStrategy
         animator.textInfo.ClearAllMeshInfo();
     }
 
+
+    public void Stop()
+    {
+        //sequence?.Kill();
+        //sequence2?.Kill();
+        //sequence = null;
+        //sequence2 = null;
+    }
     public void PreAnimate(DOTweenTMPAnimator animator)
     {
         for (int i = 0; i < animator.textInfo.characterCount; ++i)

@@ -36,7 +36,9 @@ public class DialogAnimation
 
     public void ShowFullText()
     {
+        _textComponent.DOKill();
         DOTweenTMPAnimator animator = new DOTweenTMPAnimator(_textComponent);
+        //animation.Stop();
         animation.CleanAnimations(animator);
         IsRunning = false;
     }

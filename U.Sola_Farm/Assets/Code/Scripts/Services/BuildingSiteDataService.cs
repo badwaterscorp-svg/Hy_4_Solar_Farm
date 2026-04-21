@@ -17,11 +17,9 @@ public class BuildingSiteDataService : IBuildingSiteDataService
         {
             string json = PlayerPrefs.GetString(key);
             wrapper = JsonUtility.FromJson<ResourceWrapper>(json);
-            Debug.Log($"[BuildingSiteDataService] Loaded site: BuildingSite{idSite}");
             return true;
         }
         wrapper = null;
-        Debug.Log($"[BuildingSiteDataService] No saved data for site: BuildingSite{idSite}");
         return false;
     }
 }

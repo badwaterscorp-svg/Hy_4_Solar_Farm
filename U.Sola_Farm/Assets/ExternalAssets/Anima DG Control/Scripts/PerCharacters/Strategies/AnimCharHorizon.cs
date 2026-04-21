@@ -20,6 +20,14 @@ public class AnimCharHorizon : ITypingAnimaStrategy
         }
     }
 
+    public void Stop()
+    {
+        //sequence?.Kill();
+        //sequence2?.Kill();
+        //sequence = null;
+        //sequence2 = null;
+    }
+
     public void CleanAnimations(DOTweenTMPAnimator animator)
     {
         animator.textInfo.ClearAllMeshInfo();

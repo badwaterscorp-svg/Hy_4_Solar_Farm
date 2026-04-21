@@ -27,6 +27,13 @@ public class AnimCharDisplayByFall : ITypingAnimaStrategy
         sequence.Kill();
         sequence2.Kill();
     }
+    public void Stop()
+    {
+        sequence?.Kill();
+        sequence2?.Kill();
+        sequence = null;
+        sequence2 = null;
+    }
 
     public void PreAnimate(DOTweenTMPAnimator animator)
     {
@@ -78,6 +85,14 @@ public class AnimCharFallInvert : ITypingAnimaStrategy
             animator.DOFadeChar(i, 1, 0);
             animator.SetCharOffset(i, Vector3.zero);
         }
+    }
+
+    public void Stop()
+    {
+        //sequence?.Kill();
+        //sequence2?.Kill();
+        //sequence = null;
+        //sequence2 = null;
     }
 }
 #endif

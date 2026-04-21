@@ -16,22 +16,14 @@ public class DialogHandler : MonoBehaviour
     [SerializeField] private Ease curve = Ease.OutBack;
     [SerializeField] private string defaultStrategy = "AnimCharScaleFade";
 
-    private DialogAnimation _animationHandler;
     private DialogSheet _currentDialog;
-    private ITypingAnimaStrategy _currentStrategy;
     private int _currentLineIndex;
     public bool IsActive { get; private set; }
+    public bool IsRunning { get; private set; }
 
     public event Action OnDialogStarted;
     public event Action OnDialogFinished;
     public event Action<DialogLine> OnLineChanged;
-
-    private void Awake()
-    {
-        _animationHandler = new DialogAnimation(_dialogText, timePerChar, curve, this, GetStrategy(defaultStrategy));
-    }
-
-    public bool IsRunning => _animationHandler.IsRunning;
 
     public void StartDialog(DialogSheet dialog)
     {
@@ -58,38 +50,24 @@ public class DialogHandler : MonoBehaviour
 
     public void ShowFullText()
     {
-        print(IsActive+"Activo cuando sea false retorna");
-        if (!IsActive || _currentStrategy == null) 
+        if (!IsActive) 
             return;
-        _animationHandler.ShowFullText();
+        DialogLine line = _currentDialog.lines[_currentLineIndex];
+        _dialogText.DOKill();
+        _dialogText.text = line.text;
+        IsRunning = false;
     }
 
     private void ShowLine()
     {
         DialogLine line = _currentDialog.lines[_currentLineIndex];
         OnLineChanged?.Invoke(line);
-
-        if (_speakerNameText != null)
-            _speakerNameText.text = line.speakerName;
-        _animationHandler.AnimateText(line.text);
+        _speakerNameText.text = line.speakerName;
+        _dialogText.text = "";
+        if (_dialogText != null)
+            _dialogText.DOText(line.text, line.text.Length * timePerChar).OnStart(()=>IsRunning = true).OnComplete(()=> IsRunning = false);
     }
 
-    private ITypingAnimaStrategy GetStrategy(string strategyName)
-    {
-        if (string.IsNullOrEmpty(strategyName))
-            strategyName = defaultStrategy;
-
-        Type tipo = Type.GetType(strategyName);
-        if (tipo != null)
-        {
-            object instancia = Activator.CreateInstance(tipo);
-            if (instancia is ITypingAnimaStrategy asInterface)
-                return asInterface;
-        }
-
-        Debug.LogWarning($"[DialogHandler] Strategy '{strategyName}' not found, using default.");
-        return new AnimCharScaleFade();
-    }
 
     private void EndDialog()
     {

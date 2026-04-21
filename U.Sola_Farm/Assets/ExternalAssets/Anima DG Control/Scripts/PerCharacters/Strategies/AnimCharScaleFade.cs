@@ -23,8 +23,15 @@ public class AnimCharScaleFade : ITypingAnimaStrategy
     public void CleanAnimations(DOTweenTMPAnimator animator)
     {
         animator.textInfo.ClearAllMeshInfo();
-        sequence.Kill();
-        sequence2.Kill();
+        animator.Reset();
+    }
+
+    public void Stop()
+    {
+        sequence?.Kill();
+        sequence2?.Kill();
+        sequence = null;
+        sequence2 = null;
     }
 
     public void PreAnimate(DOTweenTMPAnimator animator)

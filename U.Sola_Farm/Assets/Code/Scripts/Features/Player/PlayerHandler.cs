@@ -10,7 +10,7 @@ public class PlayerHandler : Singleton<PlayerHandler>
     [SerializeField] private PlayerModel _model;
     [SerializeField] private BackPackHandler _backPackHandler;
     [SerializeField] private TriggerDetector _triggerDetector;
-
+    [SerializeField] private bool freezeMovement;
     private PlayerThrowResources _playerThrowResources;
     private PlayerMovement _movement;
     private bool _isDragging;
@@ -99,6 +99,9 @@ public class PlayerHandler : Singleton<PlayerHandler>
 
     private void FixedUpdate()
     {
+        if (freezeMovement)
+            return;
+
         if (_isDragging)
         {
             Vector2 currentPos = _inputService.PointPosition;
