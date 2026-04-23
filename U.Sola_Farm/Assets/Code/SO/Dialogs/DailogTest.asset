@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b36ed624b47463c4f8cbe1e08a139ea1, type: 3}
   m_Name: DailogTest
   m_EditorClassIdentifier: 
+  sptUser: {fileID: 21300000, guid: e011a74012b13b843a8c8815d9495246, type: 3}
   lines:
   - speakerName: Player
     text: Hola soy el player y funciono

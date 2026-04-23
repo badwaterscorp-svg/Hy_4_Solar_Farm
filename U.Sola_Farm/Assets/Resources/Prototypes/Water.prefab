@@ -189,7 +189,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: de90126189c32a94c934e5821ef731df, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 44758003d31745b4a845d946ea114042, type: 2}
+      objectReference: {fileID: 2100000, guid: 11ec3a881cc22834fb275ac553aa5a35, type: 2}
     - target: {fileID: 919132149155446097, guid: de90126189c32a94c934e5821ef731df, type: 3}
       propertyPath: m_Name
       value: WaterDrop_WIP

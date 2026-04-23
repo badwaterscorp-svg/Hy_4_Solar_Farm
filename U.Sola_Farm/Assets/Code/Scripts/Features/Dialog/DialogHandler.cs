@@ -1,16 +1,15 @@
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using System.Collections.Generic;
 using System;
-using System.Reflection;
-using System.Linq;
+using UnityEngine.UI;
 
 public class DialogHandler : MonoBehaviour
 {
     [Header("--UI--")]
     [SerializeField] private TMP_Text _speakerNameText;
     [SerializeField] private TMP_Text _dialogText;
+    [SerializeField] private Image _image;
     [Header("--Animation--")]
     [SerializeField] private float timePerChar = 0.2f;
     [SerializeField] private Ease curve = Ease.OutBack;
@@ -63,6 +62,7 @@ public class DialogHandler : MonoBehaviour
         DialogLine line = _currentDialog.lines[_currentLineIndex];
         OnLineChanged?.Invoke(line);
         _speakerNameText.text = line.speakerName;
+        _image.sprite = _currentDialog.sptUser;
         _dialogText.text = "";
         if (_dialogText != null)
             _dialogText.DOText(line.text, line.text.Length * timePerChar).OnStart(()=>IsRunning = true).OnComplete(()=> IsRunning = false);

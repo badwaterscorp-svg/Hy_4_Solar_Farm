@@ -57,11 +57,11 @@ public class BuildingPlaceHandler : MonoBehaviour
         if (isBuilt)
             return;
 
-        _timer += Time.deltaTime;
+        _timer -= Time.deltaTime;
         
-        if (_timer >= _checkInterval)
+        if (_timer <= 0)
         {
-            _timer = 0f;
+            _timer = _checkInterval;
             ConsumeResource();
             var pass = storageRequirements.All(r => r.Amount == 0);
 

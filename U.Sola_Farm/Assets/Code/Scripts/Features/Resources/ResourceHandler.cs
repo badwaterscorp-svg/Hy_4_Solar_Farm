@@ -32,6 +32,6 @@ public class ResourceHandler : MonoBehaviour
         sequence.Append(transform.DOScale(Vector3.zero, 0)).SetEase(Ease.InBack);
         sequence.Append(transform.DOMove(posInit, 0)).SetEase(Ease.InBack);
         sequence.Append(transform.DOScale(Vector3.one, 0.1f)).SetEase(Ease.InBack);
-        sequence.Append(rb.DOJump(targetPos, 4, 1, time * 2.5f).OnComplete(() => actionEnd?.Invoke()));
+        sequence.Append(rb.DOJump(targetPos, 4, 1, time *1.1f).OnComplete(() => actionEnd?.Invoke()));
     }
 }

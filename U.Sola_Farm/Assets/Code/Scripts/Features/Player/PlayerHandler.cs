@@ -11,6 +11,7 @@ public class PlayerHandler : Singleton<PlayerHandler>
     [SerializeField] private BackPackHandler _backPackHandler;
     [SerializeField] private TriggerDetector _triggerDetector;
     [SerializeField] private bool freezeMovement;
+    [SerializeField] private Animator _animator;
     private PlayerThrowResources _playerThrowResources;
     private PlayerMovement _movement;
     private bool _isDragging;
@@ -26,15 +27,12 @@ public class PlayerHandler : Singleton<PlayerHandler>
         _movement = new PlayerMovement(_model, transform, _rb);
         _playerThrowResources = new PlayerThrowResources();
     }
-
     private void OnEnable()
     {
         _inputService.OnDragStarted += OnDragStarted;
         _inputService.OnDragStoped += OnDragStoped;
         _triggerDetector.OnTriggerEntered += OnTriggerEntered;
     }
-
-
     private void OnDisable()
     {
         _inputService.OnDragStarted -= OnDragStarted;
@@ -74,7 +72,6 @@ public class PlayerHandler : Singleton<PlayerHandler>
 
     #region TODO
     // TODO decirle a la IA que lo aisle en un script diferente
-
     private ResourceHandler GetResources(ResourceModel model) 
     {
         if (model.Name.Equals("Water"))
@@ -97,6 +94,14 @@ public class PlayerHandler : Singleton<PlayerHandler>
 
     private void OnDragStarted() => _isDragging = true;
 
+    public void SetFreezeMovement(bool freeze) => freezeMovement = freeze;
+
+    public void StartGame()
+    {
+        GameStateContext.ChangeState(GameEventType.GameStarted);
+        _animator.SetBool("Started", true);
+    }
+
     private void FixedUpdate()
     {
         if (freezeMovement)
@@ -115,7 +120,10 @@ public class PlayerHandler : Singleton<PlayerHandler>
                 _rb.MoveRotation(targetRotation);
             }
             _movement.Move(dragDir, strength);
+            _animator.SetFloat("Speed", strength);
         }
+        else
+            _animator.SetFloat("Speed",0);
     }
 }
 
