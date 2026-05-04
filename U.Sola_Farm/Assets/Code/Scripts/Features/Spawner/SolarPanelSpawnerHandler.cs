@@ -45,7 +45,7 @@ public class SolarPanelSpawnerHandler:BaseSpawnerResource
     {
         dirtyModel.Configure(this);
         yield return new WaitForSeconds(30f);
-        dirtyModel.DoDirty();
+        //dirtyModel.DoDirty();
     }
     private void ShowDeco(Transform transform) => decoEnter.SetActive(true);
     private void HideDeco(Transform transform) => decoEnter.SetActive(false);

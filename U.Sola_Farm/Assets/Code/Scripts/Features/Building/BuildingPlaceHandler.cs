@@ -37,7 +37,11 @@ public class BuildingPlaceHandler : MonoBehaviour
         }
 
         if (_dataService.TryLoad(IDSite, out ResourceWrapper wrapper))
+        { 
             storageRequirements = wrapper.resources;
+            TryBuild();
+
+        }
     }
 
     private void OnEnable()
@@ -63,12 +67,16 @@ public class BuildingPlaceHandler : MonoBehaviour
         {
             _timer = _checkInterval;
             ConsumeResource();
-            var pass = storageRequirements.All(r => r.Amount == 0);
+            TryBuild();
+        }
+    }
 
-            if (pass)
-            {
-                Build();
-            }
+    private void TryBuild() 
+    {
+        var pass = storageRequirements.All(r => r.Amount == 0);
+        if (pass)
+        {
+            Build();
         }
     }
     

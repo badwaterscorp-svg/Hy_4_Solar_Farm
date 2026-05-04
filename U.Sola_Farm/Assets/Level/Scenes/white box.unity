@@ -3323,6 +3323,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.91161
       objectReference: {fileID: 0}
+    - target: {fileID: 2603476926921182801, guid: 538c24f5eeead274eaa997716fdc9e04, type: 3}
+      propertyPath: dirtyModel.amountToClean
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6465841229489145033, guid: 538c24f5eeead274eaa997716fdc9e04, type: 3}
       propertyPath: m_UVScale.x
       value: 1

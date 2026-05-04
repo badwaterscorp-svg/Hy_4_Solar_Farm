@@ -15,6 +15,13 @@ public class WaterSpawnerHandler : BaseSpawnerResource
     [SerializeField] private GameObject decoEnter;
 
     public override int SpawnedCount => _spawnedResources.Count;
+    private void Awake()
+    {
+        if(GameStateContext.State == GameEventType.GameStarted)
+            StartSpawning();
+            
+    }
+
     protected void OnEnable()
     {
         GameStateContext.GameStateMediator.Subscribe(GameEventType.GameStarted, StartSpawning);
