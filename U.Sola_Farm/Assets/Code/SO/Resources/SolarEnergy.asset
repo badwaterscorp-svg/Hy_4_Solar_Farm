@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SolarEnergy
   m_EditorClassIdentifier: 
   path: SolarBattery
+  pool: SolarEnergy
   spt: {fileID: 21300000, guid: 50119f0fe56e84188a4a432ee184a7c2, type: 3}
   model:
     Name: Solar Energy

@@ -8,7 +8,7 @@ using System.Linq;
 
 public class BuildingPlaceHandler : MonoBehaviour
 {
-    [SerializeField] private string typeBuilding = "Solar Energy";
+    [SerializeField] private string typeBuilding = "SolarEnergy";
     [SerializeField] private TriggerDetector _triggerDetector;
     [SerializeField] private GameObject _buildingPrefab;
     [SerializeField] private float _checkInterval = 0.1f;

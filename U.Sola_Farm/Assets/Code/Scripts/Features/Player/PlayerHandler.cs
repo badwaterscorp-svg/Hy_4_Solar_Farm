@@ -18,8 +18,6 @@ public class PlayerHandler : Singleton<PlayerHandler>
     private Rigidbody _rb;
 
     [Inject] private IInputService _inputService;
-    [Inject(Id = "Water")] IResourcePoolService _poolWater;
-    [Inject(Id = "SolarEnergy")] IResourcePoolService _poolEnergy;
 
     private new void Awake()
     {
@@ -54,10 +52,10 @@ public class PlayerHandler : Singleton<PlayerHandler>
     public BackPackHandler AccessBackPackHandler() => _backPackHandler;
     public void ThrowResource(ResourceModel _model, Transform otherPos,float time) 
     {
-        var handler = GetResources(_model);
+        var handler = ResourcesPoolManager.Instance.GetResources(_model);
         handler.IsThrown = true;
         handler.transform.position = transform.position + (Vector3.up*3);
-        _playerThrowResources.ThrowResources(handler, otherPos, () => ReleaseResource(handler),time,transform);
+        _playerThrowResources.ThrowResources(handler, otherPos, () => ResourcesPoolManager.Instance.ReleaseResource(handler),time,transform);
     } 
 
     public bool AddResource(ResourceHandler resource)
@@ -66,29 +64,9 @@ public class PlayerHandler : Singleton<PlayerHandler>
         if (!added)
             transform.DOKill();
         else
-            ReleaseResource(resource);
+            ResourcesPoolManager.Instance.ReleaseResource(resource);
         return added;
     }
-
-    #region TODO
-    // TODO decirle a la IA que lo aisle en un script diferente
-    private ResourceHandler GetResources(ResourceModel model) 
-    {
-        if (model.Name.Equals("Water"))
-            return _poolWater.Get();
-        else if (model.Name.Equals("Solar Energy"))
-            return _poolEnergy.Get();
-        return null;
-    }
-
-    private void ReleaseResource(ResourceHandler resource)
-    {
-        if (resource.Sheet.Model.Name.Equals("Water"))
-            _poolWater.Release(resource);
-        else if (resource.Sheet.Model.Name.Equals("Solar Energy"))
-            _poolEnergy.Release(resource);
-    }
-    #endregion
 
     private void OnDragStoped() => _isDragging = false;
 
