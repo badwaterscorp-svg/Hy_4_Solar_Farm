@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d890f3b8de10d5e4d96a7f011efe7568
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/Runtime/ColorUtility.cs
+  uploadId: 569481

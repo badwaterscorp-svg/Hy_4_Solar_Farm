@@ -10,10 +10,11 @@ Boss/UI/
     CardBoss.cs
     ButtonBossClaimReward.cs
     ToggleBossForgive.cs
-    LabelBoss.cs
+    Label[Nombre-Data]Boss.cs
     TabBossCompleted.cs
     ScreenWinBoss.cs
     ScreenLoseBoss.cs
+    Boss[Nombre-sublógica]Displayer.cs
 ```
 
 ## Regla clave

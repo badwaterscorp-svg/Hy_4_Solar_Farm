@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0a4f1176bcc433c4796bb5cf9e98ed51
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/Runtime/MagicSandbox.MagicTileTerrain.Runtime.asmdef
+  uploadId: 569481

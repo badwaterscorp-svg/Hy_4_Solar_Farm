@@ -26,7 +26,7 @@ public class BuildingPlaceHandler : MonoBehaviour
 
     [Inject(Id = "SolarEnergy")] SolarPanelSpawnerHandler.Factory _spawnerFactorySolar;
     [Inject(Id = "Water")] WaterSpawnerHandler.Factory _spawnerFactoryWater;
-    [Inject] private IBuildingSiteDataService _dataService;
+    [Inject] private IBuildingDataService _dataService;
 
     private void Awake()
     {
@@ -40,7 +40,6 @@ public class BuildingPlaceHandler : MonoBehaviour
         { 
             storageRequirements = wrapper.resources;
             TryBuild();
-
         }
     }
 

@@ -16,6 +16,8 @@ public class BackPackAmountView:MonoBehaviour
     {
         _backPackHandler.AccessBackPack().OnModelChanged += (t) => 
         {
+            if (t == null)
+                return;
             print("Model changed: " + t.Name);
             ShowData();
         };

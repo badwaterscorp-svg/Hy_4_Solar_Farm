@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6970e7dfa8a4702439a3837baee13122
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/Editor/MagicSandbox.MagicTileTerrain.Editor.asmdef
+  uploadId: 569481

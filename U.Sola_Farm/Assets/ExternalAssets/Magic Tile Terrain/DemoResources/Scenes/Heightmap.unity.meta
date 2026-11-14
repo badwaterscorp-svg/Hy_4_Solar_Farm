@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 76896f2425154f14086ae72d9344c434
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/DemoResources/Scenes/Heightmap.unity
+  uploadId: 569481

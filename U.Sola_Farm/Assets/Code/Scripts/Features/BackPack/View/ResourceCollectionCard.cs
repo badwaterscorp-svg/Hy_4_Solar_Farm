@@ -16,6 +16,7 @@ public class ResourceCollectionCard : MonoBehaviour
         if (sheet != null && sheet.Spt != null)
         {
             _icon.sprite = sheet.Spt;
+            _icon.SetNativeSize();
         }
         _amountText.text = amount.ToString();
     }
@@ -25,6 +26,7 @@ public class ResourceCollectionCard : MonoBehaviour
         if (sheet != null && sheet.Spt != null)
         {
             _icon.sprite = sheet.Spt;
+            _icon.SetNativeSize();
         }
         _amountText.text = amount.ToString();
     }

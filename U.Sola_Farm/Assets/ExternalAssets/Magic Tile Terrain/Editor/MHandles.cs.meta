@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f8d73fa29d51e79419d5f788e64c9881
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/Editor/MHandles.cs
+  uploadId: 569481

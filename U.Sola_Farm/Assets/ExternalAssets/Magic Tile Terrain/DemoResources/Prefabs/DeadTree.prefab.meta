@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c7d129112a28fa2428224799ecc3db90
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/DemoResources/Prefabs/DeadTree.prefab
+  uploadId: 569481

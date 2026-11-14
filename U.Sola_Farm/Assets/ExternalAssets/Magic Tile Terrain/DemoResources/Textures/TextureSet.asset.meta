@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5c577d51e0fe7ea4a9703b57b8d0eb49
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/DemoResources/Textures/TextureSet.asset
+  uploadId: 569481

@@ -8,10 +8,8 @@ public class BackPack : IInventoryService
 
     public event Action<ResourceModel> OnModelChanged;
 
-    public int AmountMax { get
-        {
-            return 10;
-        }
+    private int amountMax = 10;
+    public int AmountMax { get=> amountMax;
         private set { }
     }
 
@@ -106,5 +104,19 @@ public class BackPack : IInventoryService
             ResourceWrapper wrapper = JsonUtility.FromJson<ResourceWrapper>(json);
             _resources = wrapper.resources ?? new List<ResourceModel>();
         }
+
+        if (PlayerPrefs.HasKey(KeyStorage.BackPackAmount_I))
+        {
+            amountMax = PlayerPrefs.GetInt(KeyStorage.BackPackAmount_I, amountMax);
+        }
+    }
+
+    public void ImproveAmountMax(int amount)
+    {
+        if (amount <= 0) return;
+        amountMax += amount;
+        PlayerPrefs.SetInt(KeyStorage.BackPackAmount_I, amountMax);
+        PlayerPrefs.Save();
+        OnModelChanged?.Invoke(null);
     }
 }

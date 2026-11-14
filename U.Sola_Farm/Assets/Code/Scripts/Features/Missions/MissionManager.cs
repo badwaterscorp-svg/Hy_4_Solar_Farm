@@ -3,27 +3,27 @@ using UnityEngine;
 
 public class MissionManager : MonoBehaviour
 {
-    [SerializeField]
-    private List<MissionHolder> _missions = new List<MissionHolder>();
+    [RequireBadInterface(typeof(IMission))]
+    [SerializeField] private List<MissionSeeCinematic> _missions = new List<MissionSeeCinematic>();
 
     public void StartMission(int index)
     {
-        if (index >= 0 && index < _missions.Count && _missions[index].Mission != null)
-            _missions[index].Mission.StartMission();
+        if (index >= 0 && index < _missions.Count && _missions[index] != null)
+            _missions[index].StartMission();
     }
 
     public void CompleteMission(int index)
     {
-        if (index >= 0 && index < _missions.Count && _missions[index].Mission != null)
-            _missions[index].Mission.CompleteMission();
+        if (index >= 0 && index < _missions.Count && _missions[index] != null)
+            _missions[index].CompleteMission();
     }
 
     public void StartAllMissions()
     {
         foreach (var holder in _missions)
         {
-            if (holder.Mission != null)
-                holder.Mission.StartMission();
+            if (holder != null)
+                holder.StartMission();
         }
     }
 }

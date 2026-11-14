@@ -17,11 +17,11 @@ Features/Boss/
 Una Feature debe poder entenderse y modificarse sin tocar otras partes del sistema.
 **Comunicación**:
     Cada Feature debe vivir en su propia carpeta dentro de `Features/`:
-    `Features/[Nombre]/` -> Contiene Model, Controller, View, sub-lógicas e Installer.
+    `Features/[Nombre]/`.
 
 **Desacoplamiento de Unity**:
-    - `Model`, `Handler` y lógicas específicas (como `BossAttack`) **NO** deben heredar de `MonoBehaviour`.
-    - Solo la `Handler` interactúa con el motor de Unity.
+    - `Manager`, `Handler`, `EventListener`, `Displayer`, `Sheet`.
+    - El `Displayer` suele estar, contener, o comunicarse con objecto de la skill uui
 **Comunicación**:
     - El `Handler` avisa a lógica específica.
     - La lógica específica (como `BossAttack`) obtiene datos del `Model`
@@ -50,56 +50,7 @@ public class BossModel: ICopy<BossModel>
 
 ---
 
-### BossMovement (Lógica específica)
-
-```csharp
-public class BossMovement
-{
-    private BossModel _model;
-    private Transform _transform;
-
-    public BossMovement(BossModel model, Transform transform)
-    {
-        _model = model;
-        _transform = transform;
-    }
-
-    public void Move(Vector3 direction)
-    {
-        _transform.position += direction * _model.MoveSpeed * Time.deltaTime;
-    }
-}
-```
-
-### BossAttack
-
-```csharp
-public class BossAttack
-{
-    private IAudioService _audioService;
-    private IPoolService<Bullet> _bulletPool;
-    private BossHandler handler;
-
-    public BossAttack(
-        IAudioService audioService,
-        IPoolService<Bullet> bulletPool
-        )
-    {
-        _audioService = audioService;
-        _bulletPool = bulletPool;
-    }
-
-    public void Shoot()
-    {
-        var bullet = _bulletPool.Get();
-        _audioService.Play("boss_shoot");
-    }
-}
-```
-
----
-
-### BossHandler (Orquestador)
+### BossHandler (Instancia Especifica)
 
 ```csharp
 public class BossHandler:Monobehaviour
@@ -107,6 +58,7 @@ public class BossHandler:Monobehaviour
     private BossMovement _movement;
     private BossAttack _attack;
     private BossHealth _health;
+    private BossModel _model
 
     private void Start()
     {
@@ -124,5 +76,55 @@ public class BossHandler:Monobehaviour
     {
         _attack.Shoot();
     }
+
+    public void Configure(BossSheet sheet)
+    {
+        _model = sheet.model;
+    }
+}
+```
+
+---
+
+### BossManager (Orquestador)
+
+Maneja configura o escucha varios handlers, esto es ideal en logica que tiene que comunicarse con varios, o elegir cual es el `Handler` actual
+
+
+```csharp
+public class BossManager:Singleton<BossManager>
+{
+    private BossHandler[] handlers;
+    private BossSheet bossData;
+
+    private void Start()
+    {
+        foreach(var handler in handlers)
+        {
+            handler.Configure(bossData);
+            handler.OnShot += Listen
+        }
+    }
+
+    private void Listen()
+    {
+        Console.Log("Shot");
+    }
+}
+```
+
+
+### BossSheet (Data)
+
+es un scriptable object y suele estar en una lista del manager e injectarse al handler en la configuración
+
+```csharp
+public class BossSheet:ScriptableObject
+{
+    [Serializedfield] private Sprite iconBoss;
+    public Sprite IconBoss => iconBoss;
+    [Serializedfield] private BossModel model;
+    public BossModel ModelCopy =>model.Copy();
+    
 }
 ```

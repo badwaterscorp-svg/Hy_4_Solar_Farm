@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BuildingSiteDataService : IBuildingSiteDataService
+public class BuildingSiteDataService : IBuildingDataService
 {
     public void Save(string idSite, ResourceWrapper wrapper)
     {

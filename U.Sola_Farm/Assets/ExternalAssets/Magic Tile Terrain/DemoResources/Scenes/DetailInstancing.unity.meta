@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: fed1157c59bc3cf44b7763d7c19a81fd
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/DemoResources/Scenes/DetailInstancing.unity
+  uploadId: 569481

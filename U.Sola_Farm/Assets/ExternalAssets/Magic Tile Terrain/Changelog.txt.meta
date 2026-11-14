@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c9f74f5164baa8c47ae971111fe8bd1e
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/Changelog.txt
+  uploadId: 569481

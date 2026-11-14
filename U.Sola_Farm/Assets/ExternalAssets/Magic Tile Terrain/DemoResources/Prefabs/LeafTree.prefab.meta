@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2ffeda5fee797be4489912dd2f26e704
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/DemoResources/Prefabs/LeafTree.prefab
+  uploadId: 569481

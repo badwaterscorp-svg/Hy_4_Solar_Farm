@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0fd6e45d290f0054bbfa1adab111c9d9
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/Third-Party Notices.txt
+  uploadId: 569481

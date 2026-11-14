@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 43cce10d08c1ca14bb614a6c1fad2466
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/DemoResources/Materials/Terrain.mat
+  uploadId: 569481

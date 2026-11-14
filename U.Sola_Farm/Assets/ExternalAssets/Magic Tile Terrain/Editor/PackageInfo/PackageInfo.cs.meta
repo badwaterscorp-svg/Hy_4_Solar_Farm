@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 96c3715989da7e043ab147d92f23fb18
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228555
+  packageName: Magic Tile Terrain
+  packageVersion: 1.5.0
+  assetPath: Assets/Magic Tile Terrain/Editor/PackageInfo/PackageInfo.cs
+  uploadId: 569481
